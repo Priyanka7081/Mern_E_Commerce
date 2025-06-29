@@ -1,6 +1,8 @@
 import { User } from "../Models/User.js";
 import bcrypt from 'bcryptjs'
 
+
+//USER REGISTER
 export const register = async (req, res) => {
     const { name, email, password } = req.body
     try {
@@ -18,20 +20,33 @@ export const register = async (req, res) => {
     }
 };
 
+
+//USER LOGIN
 export const login = async (req, res) => {
     const { email, password } = req.body
     try {
         let user = await User.findOne({ email });
-        if (!user) return res.json({ message: "User Not Find", success: false })
+        if (!user) return res.json({ message: "User Not Find", success: false });
         const validPassword = await bcrypt.compare(password, user.password);
-        if (InvalidPassword) return res.json({
+        if (!validPassword) return res.json({
             message: 'Invalid Credential',
             success: false
         });
-        res.json({message:`Welcom ${user.name}`,success:true,user})
+        res.json({ message: `Welcom ${user.name}`, success: true, user })
 
     } catch (error) {
-        res.json({message:error.message})
+        res.json({ message: error.message })
 
     }
-}
+};
+
+//GET ALL USER
+export const users = async (req,res) => {
+    try {
+        let user = await User.find().sort({ createdAt: -1 });
+        res.json(user)
+    } catch (error) {
+        res.json(error.message)
+
+    }
+} 
