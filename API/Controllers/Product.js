@@ -26,3 +26,19 @@ export const getProductById = async(req,res)=>{
   if(!product) return res.json({message:'Invalid Id'})
   res.json({message:'specific product',product});
 } 
+
+//UpdateProduct by Id
+export const updateProductById = async(req,res)=>{
+  const id = req.params.id;
+  let product = await Products.findByIdAndUpdate(id,req.body,{new:true})
+  if(!product) return res.json({message:'Invalid Id'})
+  res.json({message:'Product has been updated..',product});
+} 
+
+// delete Product by Id
+export const deleteProductById = async(req,res)=>{
+  const id = req.params.id;
+  let product = await Products.findByIdAndDelete(id)
+  if(!product) return res.json({message:'Invalid Id'})
+  res.json({message:'Product has been deleted..',product});
+} 
